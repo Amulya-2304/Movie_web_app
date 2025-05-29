@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Explore | MoviWeb{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">
+        {% if user %}
+            🎞 Movies for {{ user.name }}
+        {% else %}
+            🎥 Movie Collection
+        {% endif %}
+    </h1>
+
+    {% if user %}
+    <div class="text-center mb-4">
+        <a href="{{ url_for('add_movie', user_id=user.id) }}" class="btn btn-success">+ Add New Movie</a>
+    </div>
+    {% endif %}
+
+    {% if favorite_movies %}
+        <h3 class="text-center mt-4">⭐ Favorite Movies</h3>
+        <div class="row">
+            {% for movie in favorite_movies %}
+                {% include 'partials/movie_card.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+<form method="GET" action="{{ url_for('explore_movies') }}" class="mb-4 text-center">
+    {% if user %}
+    <input type="hidden" name="user_id" value="{{ user.id }}">
+    {% endif %}
+    <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+        <div class="input-group" style="max-width: 400px;">
+            <input type="text" class="form-control" name="q" placeholder="Search movies..." value="{{ search_query or '' }}">
+        </div>
+
+        <select class="form-select" name="sort" style="max-width: 180px;">
+            <option value="title" {% if selected_sort == 'title' %}selected{% endif %}>Sort by Title</option>
+            <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Sort by Rating</option>
+            <option value="year" {% if selected_sort == 'year' %}selected{% endif %}>Sort by Year</option>
+        </select>
+
+        <button class="btn btn-outline-primary" type="submit">Apply</button>
+    </div>
+</form>
+
+    <div class="row">
+        {% if movies|length == 0 %}
+            <p class="text-center text-muted">No movies found for "<strong>{{ search_query }}</strong>".</p>
+        {% endif %}
+        {% for movie in movies %}
+            {% include 'partials/movie_card.html' %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

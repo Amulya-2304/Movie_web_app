@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Choose User | MoviWeb{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <h1 class="text-center mb-4">👤 Choose a User</h1>
+
+    <div class="list-group">
+        {% for user in users %}
+            {% if next_page == 'add' %}
+                <a href="{{ url_for('add_movie', user_id=user.id) }}" class="list-group-item list-group-item-action">
+                    ➕ Add Movie as {{ user.name }}
+                </a>
+            {% else %}
+                <a href="{{ url_for('explore_movies') }}?user_id={{ user.id }}" class="list-group-item list-group-item-action">
+                    🎬 Explore as {{ user.name }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,27 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Movie - MovieWeb App</title>
-</head>
-<body>
-    <header>
-        <h1>Add Movie to {{ user.name }}</h1>
-    </header>
+{% extends "base.html" %}
 
-    <form action="/users/{{ user.id }}/add_movie" method="POST">
-        <label for="title">Movie Title:</label>
-        <input type="text" id="title" name="title" required>
+{% block title %}Add Movie | MoviWeb{% endblock %}
 
-        <label for="rating">Rating:</label>
-        <input type="number" id="rating" name="rating" min="1" max="10" step="0.1" required>
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">🎬 Add a New Movie</h1>
+    <h5 class="text-center mb-4 text-muted">for {{ user.name }}</h5>
 
-        <button type="submit">Add Movie</button>
+    <form method="POST" action="{{ url_for('add_movie', user_id=user.id) }}" class="mx-auto" style="max-width: 500px;">
+        <div class="mb-3">
+            <label for="title" class="form-label">Movie Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="year" class="form-label">Release Year</label>
+            <input type="number" class="form-control" id="year" name="year" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="rating" class="form-label">IMDb Rating</label>
+            <input type="number" step="0.1" min="0" max="10" class="form-control" id="rating" name="rating" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="poster" class="form-label">Poster URL</label>
+            <input type="url" class="form-control" id="poster" name="poster" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Add Movie</button>
     </form>
 
-    <nav>
-        <a href="/users/{{ user.id }}">Back to {{ user.name }}'s Movies</a>
-    </nav>
-</body>
-</html>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('explore_movies', user_id=user.id) }}" class="btn btn-outline-secondary">← Back to Explore</a>
+    </div>
+</div>
+{% endblock %}
